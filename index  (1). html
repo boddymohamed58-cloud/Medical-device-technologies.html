@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Equipment Midterm Exam Quiz</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --bg: #f4f7f6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        .question-card {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .option-btn:hover:not([disabled]) {
+            background: #e9ecef;
+            border-color: var(--secondary);
+        }
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            display: none;
+        }
+        .explanation.visible {
+            display: block;
+            background-color: #e8f4f8;
+            border-left: 4px solid var(--secondary);
+        }
+        .score-board {
+            position: sticky;
+            top: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            z-index: 100;
+        }
+        .section-header {
+            background: var(--secondary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 30px 0 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Medical Equipment Exam Practice</h1>
+    <div class="subtitle">Higher Technological Institute of Applied Health Sciences</div>
+    
+    <div class="score-board">
+        Score: <span id="score">0</span> / <span id="total">0</span>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+const quizData = [
+    // PART 1: MCQ
+    { type: "header", title: "Part 1: Multiple Choice Questions" },
+    {
+        q: "1- In anesthesia Machine excess gas is discharged through the:",
+        options: ["A. soda lime", "B. Vaporizer", "C. APL valve", "D. O2 flowmeter"],
+        answer: 2
+    },
+    {
+        q: "2- Cylinder sizes are designated according to letters, which one is common in medical applications?",
+        options: ["A. size M", "B. size V", "C. size B", "D. size E"],
+        answer: 3
+    },
+    {
+        q: "3- Producing deep heating directly into the tissues:",
+        options: ["A. Electrocautery", "B. Electrocardiograph", "C. Electrosurgery", "D. None"],
+        answer: 2
+    },
+    {
+        q: "4- .......... is/are the used mode of ventilation during general anesthesia.",
+        options: ["A. VCV & PCV", "B. SIMV", "C. CPAP", "D. IPAP"],
+        answer: 0
+    },
+    {
+        q: "5- The normal heart frequency is about:",
+        options: ["A. 10 HZ", "B. 100 HZ", "C. 1000 HZ", "D. 1 HZ"],
+        answer: 3
+    },
+    {
+        q: "6- One of this is NOT a Limitation for pulse oximetry:",
+        options: ["A. lipids", "B. nail polish", "C. poor circulation", "D. cut off limbs"],
+        answer: 3
+    },
+    {
+        q: "7- Red light is in the wavelength:",
+        options: ["A. 660 nm", "B. 900-940nm", "C. 200 nm", "D. 1200 nm"],
+        answer: 0
+    },
+    {
+        q: "8- When your skeletal muscles undergo tremors, the ECG is bombarded with seemingly random activity:",
+        options: ["A. AC interference", "B. Muscle Tremor", "C. Poor grounded", "D. None"],
+        answer: 1
+    },
+    {
+        q: "9- Pulse oximetry cannot tell you Except:",
+        options: ["A. O2 content of the blood", "B. Amount of O2 dissolved in blood", "C. Respiratory rate or tidal volume", "D. Pulse rate"],
+        answer: 3
+    },
+    {
+        q: "10- ........... Delays and relays the impulse to ensure proper timing between atrial and ventricular contractions.",
+        options: ["A. (SA) node", "B. (AV) node", "C. heart fiber", "D. atria"],
+        answer: 1
+    },
+    {
+        q: "11- ........... sensor application is limited to peripheral parts.",
+        options: ["A. Reflectance", "B. Transmittance"],
+        answer: 1
+    },
+    {
+        q: "12- Pulse oximetry tells you:",
+        options: ["A. ERG", "B. EMG", "C. SPO2", "D. ECG"],
+        answer: 2
+    },
+    {
+        q: "13- The ........... leads record voltage difference between two electrodes.",
+        options: ["A. Unipolar", "B. Bipolar", "C. Polarity", "D. None"],
+        answer: 1
+    },
+    {
+        q: "14- Anesthesia Machine can give 35-70 L/min of flow with a pressure of 45-60 PSIG of only oxygen by pressing:",
+        options: ["A. O2 Flush", "B. Vaporizer", "C. APL", "D. Safety knob"],
+        answer: 0
+    },
+    {
+        q: "15- ........... absorption Carbon dioxide from the patient breathing circuit in anesthesia Machine:",
+        options: ["A. soda lime", "B. Vaporizer", "C. APL", "D. O2 flowmeter"],
+        answer: 0
+    },
+    {
+        q: "16- Endoscopes machines are types of:",
+        options: ["A. Therapeutic Equipment only", "B. Diagnostics Equipment only", "C. Diagnostics & Therapeutic Equipment", "D. Life support Equipment"],
+        answer: 2
+    },
+    {
+        q: "17- ........... probe can be placed on virtually any place on the body.",
+        options: ["A. Reflectance", "B. Transmittance", "C. Flowmeter", "D. Manometer"],
+        answer: 0
+    },
+    {
+        q: "18- Vaporizer is the device which produces a vapor from a volatile liquid anesthetic. Halogenated anesthetics include:",
+        options: ["A. Silver & silver chloride", "B. Sulfate & phosphate", "C. Isoflurane and sevoflurane", "D. None"],
+        answer: 2
+    },
+    
+    // FIGURE QUESTIONS
+    { type: "header", title: "Electrosurgery Components Identification (Figure 19)" },
+    {
+        q: "19.A- Which Part is designed to prevent thermal effect called burn (Patient Return Electrode)?",
+        options: ["A. Part A (Foot Switch)", "B. Part B (Patient Return Electrode)", "C. Part C (Bipolar Forceps)", "D. Part D (Electrosurgery Unit)"],
+        answer: 1
+    },
+    {
+        q: "19.B- Hand-free control pedal allowing doctor to activate or deactivate unit:",
+        options: ["A. Part A (Foot switch)", "B. Part B (Patient Return Electrode)", "C. Part C (Bipolar)", "D. Part D (ESU Unit)"],
+        answer: 0
+    },
+    {
+        q: "19.C- Passing high current directly through tissues using main generator unit:",
+        options: ["A. Part A", "B. Part B", "C. Part C", "D. Part D (Electrosurgery Unit)"],
+        answer: 3
+    },
+    {
+        q: "19.D- Which part makes patient return electrode unnecessary/absent during its direct use?",
+        options: ["A. Part A (Foot switch)", "B. Part B (Return Electrode)", "C. Part C (Bipolar Forceps)", "D. Part D (ESU Generator)"],
+        answer: 2
+    },
+
+    // MORE MCQs
+    { type: "header", title: "General Questions Continued" },
+    {
+        q: "20- In ECG, ........... electrode functions solely as a ground to prevent alternating-current interference.",
+        options: ["A. RA", "B. LA", "C. RL", "D. LL"],
+        answer: 2
+    },
+    {
+        q: "21- The most common electrode used for an ECG machine is the ........... electrode because it is stable when exposed to biological tissue.",
+        options: ["A. Fi-FiCl", "B. Na-NaCl", "C. Si-SiCl", "D. Ag-AgCl"],
+        answer: 3
+    },
+    {
+        q: "22- All are types of laboratory equipment except:",
+        options: ["A. Sample separation", "B. Microscopy", "C. Hematology", "D. X-ray"],
+        answer: 3
+    },
+    {
+        q: "23- Infrared light is in the wavelength:",
+        options: ["A. 660 nm", "B. 900-940 nm", "C. 200 nm", "D. 1200 nm"],
+        answer: 1
+    },
+    {
+        q: "24- Oximetry Probe Placement at all of the following except:",
+        options: ["A. Finger", "B. Earlobe", "C. Heel (neonates)", "D. Head"],
+        answer: 3
+    },
+    {
+        q: "25- ECG can be detected using how many electrodes?",
+        options: ["A. 3 electrodes", "B. 5 electrodes", "C. 10 electrodes", "D. All of the above"],
+        answer: 3
+    },
+    {
+        q: "26- Dividing tissues with electric sparks by maximum current concentration:",
+        options: ["A. Coagulation", "B. Cutting", "C. Fulguration", "D. Desiccation"],
+        answer: 1
+    },
+    {
+        q: "27- A medical technique of burning a part of a body to remove or close off a part of it by heating tissues:",
+        options: ["A. Defibrillator", "B. Electrocautery", "C. Electrocardiograph", "D. None"],
+        answer: 1
+    },
+
+    // PART 2: TRUE / FALSE
+    { type: "header", title: "Part 2: True (T) or False (F)" },
+    {
+        q: "1. Direct coupling occurs when the active electrode comes into direct contact with another metal instrument.",
+        options: ["True", "False"],
+        answer: 0,
+        explanation: "Correct! Direct contact causes current leakage into other metal tools."
+    },
+    {
+        q: "2. An electrosurgical unit transforms electrical power from the mains into high-frequency current.",
+        options: ["True", "False"],
+        answer: 0,
+        explanation: "Correct! ESU operates at high frequencies (100 kHz - 5 MHz) to prevent muscle stimulation."
+    },
+    {
+        q: "3. Electrocautery works by sending electrical current directly through body tissues.",
+        options: ["True", "False"],
+        answer: 1,
+        explanation: "False! Electrocautery heats a wire directly via current, but the current does NOT pass through patient tissue (Electrosurgery passes current through tissue)."
